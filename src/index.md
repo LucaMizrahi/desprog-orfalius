@@ -23,7 +23,13 @@ Mas antes de se aprofundar no Boyer-Moore que é um algoritmo mais complexo, vam
 
 Um exemplo de algoritmo de busca em texto mais simples é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser simples mas ineficiente. A base dele é de seguir de letra por letra no texto, e é justamente isso que o torna ineficiente (já que todos os caracteres são lidos, mesmo que grande parte deles não corresponda a palavra que se deseja encontrar), além ter uma complexidade de $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
 
-Por curiosidade, o código em C desse algoritmo é:
+??? Checkpoint
+
+Exemplo de busca em texto utilizando algoritmo convencional (Naive String Search):
+
+???
+
+Por curiosidade, o código em C desse algoritmo básico é:
 
 ```c
 void Naive_String_Search(char* pat, char* txt)
@@ -64,13 +70,17 @@ E então a questão que fica é:
 Algoritmo Boyer-Moore de Busca em Texto
 ---------
 
-O algoritmo Boyer-Moore é um algoritmo de busca em texto que utiliza uma heurística para pular caracteres que com certeza não fazem parte da palavra que está sendo buscada. Essa heurística é baseada em duas regras:
+O algoritmo Boyer-Moore é um algoritmo eficiente de busca em texto e hoje é um dos algoritmos mais utilizados para esse problema. Ele foi desenvolvido por Robert S. Boyer e J Strother Moore em 1977.
+
+A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística para pular caracteres que com certeza não fazem parte da palavra que está sendo buscada ('padrão'). Essa heurística é baseada em duas regras:
 
 1. *The bad-character rule*;
 
 2. *The good-suffix rule*;
 
 Primeiramente vamos entender como funciona a heurística do *bad-character rule*.
+
+
 
 assim como
 
