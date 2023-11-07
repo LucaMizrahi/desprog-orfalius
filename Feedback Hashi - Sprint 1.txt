@@ -1,0 +1,17 @@
+Feedback Hashi - Sprint 1
+
+- Introduzir um algoritmo de busca de texto simples, antes de falar do Boyer-Moore. E ressaltar em relação a que método o algoritmo que estamos analisando deve ser melhor. 
+
+- Gastar um tempo razoável falando do algoritmo básico de busca em texto.
+
+- Ressaltar que o bad-character rule só funciona porque as comparações são feitas da direita para esquerda ao invés de ser da esquerda para direita (que é mais intuitivo para a maioria das pessoas) 
+
+- Utilizar MUITOS EXEMPLOS durante o handout
+
+- Utilizar exemplos para explicitar as complexidades para worst-case scenario e best-case scenario
+
+- Auxiliar o leitor do handout a ja ir montando o algoritmo por conta próprio ("Nesse exemplo, utilizando o método convencional, daria para realizar algum salto depois de tal situação?")
+
+- Realizar animações das ideias rodando (Parecido com os handouts dos algoritmos de ordenação do Hashi)
+
+- Maior Número de Exemplos e Animações Possível

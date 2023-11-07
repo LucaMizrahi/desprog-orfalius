@@ -66,6 +66,7 @@ E então a questão que fica é:
 
 *Como podemos pular caracteres que com certeza não fazem parte da palavra que está sendo buscada?*
 
+------------------------------------------------------------------------------
 
 Algoritmo Boyer-Moore de Busca em Texto
 ---------
@@ -80,6 +81,10 @@ A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística pa
 
 Primeiramente vamos entender como funciona a heurística do *bad-character rule*.
 
+:bad_character
+
+//FIM DO NOSSO HANDOUT
+![](fim.png)
 
 
 assim como
@@ -90,7 +95,7 @@ assim como
 
 e imagens. Lembre que todas as imagens devem estar em uma subpasta *img*.
 
-![](logo.png)
+
 
 Para tabelas, usa-se a [notação do
 MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html),
