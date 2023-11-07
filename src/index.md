@@ -1,10 +1,50 @@
-Título
+Algoritmo Boyer-Moore de Busca em Texto
 ======
 
-Subtítulo
+Links Relacionados a Este Algoritmo
 ---------
 
-Para criar um parágrafo, basta escrever um texto contínuo, sem pular linhas.
+* [Wikipedia](https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm)
+
+* [GeeksForGeeks](https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/)
+
+------------------------------------------------------------------------------
+
+Importância da Busca em Texto
+---------
+
+A busca em texto é um problema clássico da computação. A ideia é encontrar um padrão de caracteres em uma sequência de caracteres maior. Por exemplo, encontrar a palavra "algoritmo" em um texto. A busca em texto é um problema importante, pois é a base de muitas aplicações, como *editores de texto*, *mecanismos de busca* como o google, *editores de código*, *compiladores*, *o famoso control + f*, etc.
+
+------------------------------------------------------------------------------
+
+Tipo Classico de Busca em Texto
+---------
+
+Um exemplo de algoritmo de busca em texto é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser simples mas ineficiente. A base dele é de seguir de letra por letra no texto, por isso faz ele ser ineficiente e ter uma complexidade de $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
+
+Por curiosidade, o código em C desse algoritmo é:
+
+```c
+void search(char* pat, char* txt)
+{
+    int M = strlen(pat);
+    int N = strlen(txt);
+ 
+    /* A loop to slide pat[] one by one */
+    for (int i = 0; i <= N - M; i++) {
+        int j;
+ 
+        /* For current index i, check for pattern match */
+        for (j = 0; j < M; j++)
+            if (txt[i + j] != pat[j])
+                break;
+ 
+        if (j
+            == M) // if pat[0...M-1] = txt[i, i+1, ...i+M-1]
+            printf("Pattern found at index %d \n", i);
+    }
+}
+```
 
 Você também pode criar
 
