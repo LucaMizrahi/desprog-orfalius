@@ -19,13 +19,14 @@ A busca em texto é um problema clássico da computação. A ideia é encontrar 
 
 Tipo Classico de Busca em Texto
 ---------
+Mas antes de se aprofundar no Boyer-Moore que é um algoritmo mais complexo, vamos antes entender um algoritmo mais simples de busca em texto. 
 
-Um exemplo de algoritmo de busca em texto é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser simples mas ineficiente. A base dele é de seguir de letra por letra no texto, por isso faz ele ser ineficiente e ter uma complexidade de $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
+Um exemplo de algoritmo de busca em texto mais simples é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser simples mas ineficiente. A base dele é de seguir de letra por letra no texto, e é justamente isso que o torna ineficiente (já que todos os caracteres são lidos, mesmo que grande parte deles não corresponda a palavra que se deseja encontrar), além ter uma complexidade de $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
 
 Por curiosidade, o código em C desse algoritmo é:
 
 ```c
-void search(char* pat, char* txt)
+void Naive_String_Search(char* pat, char* txt)
 {
     int M = strlen(pat);
     int N = strlen(txt);
@@ -46,13 +47,30 @@ void search(char* pat, char* txt)
 }
 ```
 
-Você também pode criar
+??? Checkpoint
 
-1. listas;
+Você consegue pensar em alguma forma de deixar a busca em texto mais rápida e eficiente?
 
-2. ordenadas,
+::: Gabarito
+Uma possível maneira de otimizar a busca seria, ao invés de passar de caractere por caractere do texto, encontrar uma maneira de **pular caracteres** que com certeza {red}(não) fazem parte da palavra que está sendo buscada.
+:::
+???
 
-3. GustavoEso;
+E então a questão que fica é:
+
+*Como podemos pular caracteres que com certeza não fazem parte da palavra que está sendo buscada?*
+
+
+Algoritmo Boyer-Moore de Busca em Texto
+---------
+
+O algoritmo Boyer-Moore é um algoritmo de busca em texto que utiliza uma heurística para pular caracteres que com certeza não fazem parte da palavra que está sendo buscada. Essa heurística é baseada em duas regras:
+
+1. *The bad-character rule*;
+
+2. *The good-suffix rule*;
+
+Primeiramente vamos entender como funciona a heurística do *bad-character rule*.
 
 assim como
 
@@ -117,4 +135,14 @@ Este é um exemplo de exercício, entre `md ???`.
 Este é um exemplo de gabarito, entre `md :::`.
 :::
 
+???
+
+
+??? Checkpoint
+
+Este é um exemplo de Checkpoint, entre `md ???`.
+
+::: Gabarito
+Este é um exemplo de gabarito, entre `md :::`.
+:::
 ???
