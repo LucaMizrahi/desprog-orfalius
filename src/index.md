@@ -66,7 +66,7 @@ E então a questão que fica é:
 
 *Como podemos pular caracteres que com certeza não fazem parte da palavra que está sendo buscada?*
 
-------------------------------------------------------------------------------
+
 
 Algoritmo Boyer-Moore de Busca em Texto
 ---------
@@ -79,10 +79,13 @@ A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística pa
 
 2. *The good-suffix rule*;
 
-Primeiramente vamos entender como funciona a heurística do *bad-character rule*.
+Primeiramente vamos entender como funciona a heurística do *bad-character rule*. Considerando um texto $T$ e um padrão $P$, a heurística do *bad-character rule* consiste em, ao encontrar um caractere que não faz parte do padrão, pular o máximo de caracteres possível para a direita, de forma que o caractere que não faz parte do padrão fique alinhado com o último caractere do padrão.
+
+Segue uma curta simulação para ficar mais claro o funcionamento do **bad-character rule**:
 
 :bad_character
 
+-----------------------------------------------------------------------------
 //FIM DO NOSSO HANDOUT
 ![](fim.png)
 
