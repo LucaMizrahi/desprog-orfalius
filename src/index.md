@@ -79,9 +79,14 @@ A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística pa
 
 2. *The good-suffix rule*;
 
-Primeiramente vamos entender como funciona a heurística do *bad-character rule*. Considerando um texto $T$ e um padrão $P$, a heurística do *bad-character rule* consiste em, ao encontrar um caractere que não faz parte do padrão, pular o máximo de caracteres possível para a direita, de forma que o caractere que não faz parte do padrão fique alinhado com o último caractere do padrão.
+Primeiramente vamos entender como funciona a heurística do *bad-character rule*. Considerando um texto $T$ e um padrão $P$, a heurística do *bad-character rule* consiste em, sempre que há um "mismatch" entre $P$ e $T$ (ou seja, quando um caractere do padrão não corresponde ao caractere do texto), o padrão é deslocado para a direita de forma que o caractere do texto que não corresponde ao caractere do padrão seja alinhado com a próxima ocorrência desse caractere no padrão. Caso não haja nenhuma ocorrência, todo o padrão $P$ é shiftado para depois do caractere do texto que não corresponde a nenhum caractere do padrão.
 
 Segue uma curta simulação para ficar mais claro o funcionamento do **bad-character rule**:
+
+!!! Aviso
+É muito importante enteder que a regra do *bad-character* só funciona efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
+!!!
+
 
 :bad_character
 
