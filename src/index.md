@@ -21,15 +21,13 @@ Tipo Classico de Busca em Texto
 ---------
 Mas antes de se aprofundar no Boyer-Moore que é um algoritmo mais complexo, vamos antes entender um algoritmo mais simples de busca em texto. 
 
-Um exemplo de algoritmo de busca em texto mais simples é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser simples mas ineficiente. A base dele é de seguir de letra por letra no texto, e é justamente isso que o torna ineficiente (já que todos os caracteres são lidos, mesmo que grande parte deles não corresponda a palavra que se deseja encontrar), além ter uma complexidade de $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
+Um exemplo de algoritmo de busca em texto mais simples é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser {red}(simples mas ineficiente). A base dele é de seguir de letra por letra no texto, comparando o padrão com o texto, até que o padrão apareça no texto (caso apareça), e é justamente isso que o torna ineficiente (já que todos os caracteres são lidos, mesmo que grande parte deles não corresponda a palavra que se deseja encontrar). Dessa forma, de forma intuitiva, a complexidade do algoritmo é $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
 
-??? Checkpoint
+Segue uma simulação do funcionamento do algoritmo **Naive String Search**, considerando um texto $T$ e um padrão $P$, que se deseja encontrar no texto:
 
-Exemplo de busca em texto utilizando algoritmo convencional (Naive String Search):
+:naive_matching_algorithm
 
-???
-
-Por curiosidade, o código em C desse algoritmo básico é:
+Por curiosidade, segue o código em C desse algoritmo básico de busca em texto:
 
 ```c
 void Naive_String_Search(char* pat, char* txt)
@@ -46,8 +44,7 @@ void Naive_String_Search(char* pat, char* txt)
             if (txt[i + j] != pat[j])
                 break;
  
-        if (j
-            == M) // if pat[0...M-1] = txt[i, i+1, ...i+M-1]
+        if (j == M) // if pat[0...M-1] = txt[i, i+1, ...i+M-1]
             printf("Pattern found at index %d \n", i);
     }
 }
@@ -73,7 +70,7 @@ Algoritmo Boyer-Moore de Busca em Texto
 
 O algoritmo Boyer-Moore é um algoritmo eficiente de busca em texto e hoje é um dos algoritmos mais utilizados para esse problema. Ele foi desenvolvido por Robert S. Boyer e J Strother Moore em 1977.
 
-A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística para pular caracteres que com certeza não fazem parte da palavra que está sendo buscada ('padrão'). Essa heurística é baseada em duas regras:
+A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística para pular caracteres que com certeza não fazem parte da palavra que está sendo buscada (*'padrão'*). Essa heurística é baseada em duas regras:
 
 1. *The bad-character rule*;
 
@@ -84,11 +81,44 @@ Primeiramente vamos entender como funciona a heurística do *bad-character rule*
 Segue uma curta simulação para ficar mais claro o funcionamento do **bad-character rule**:
 
 !!! Aviso
-É muito importante enteder que a regra do *bad-character* só funciona efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
+É muito importante enteder que tanto a regra do *bad-character*, quanto a do *good-sufix* só funcionam efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
 !!!
 
 
 :bad_character
+
+Por curiosidade, segue o código em C da heurística do *bad-character rule*:
+
+```c
+# define NO_OF_CHARS 256 
+
+void badCharHeuristic( string str, int size, int badchar[NO_OF_CHARS])
+{
+	int i;
+	// Initializing all occurrences as -1
+	for (i = 0; i < NO_OF_CHARS; i++)
+		badchar[i] = -1;
+
+	// Fill the actual value of last occurrence
+	// of a character
+	for (i = 0; i < size; i++)
+		badchar[(int) str[i]] = i;
+}
+```	
+
+Em relação a segunda heurística utilizada pelo algoritmo Boyer-Moore, a *good-suffix rule*, ela é utilizada para shiftar o padrão $P$ para a direita, caso haja um "mismatch" entre $P$ e $T$. A heurística consiste em, ...
+
+*Bem mais complexo que a outra heurística né?*
+
+Segue uma curta simulação para ficar mais claro o funcionamento do **good-sufix rule**:
+
+:good_sufix
+
+Por curiosidade, segue o código em C da heurística do *good-sufix rule*:
+
+```c
+
+```
 
 -----------------------------------------------------------------------------
 //FIM DO NOSSO HANDOUT
