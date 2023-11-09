@@ -120,6 +120,7 @@ Por curiosidade, segue o código em C da heurística do *good-sufix rule*:
 
 ```
 
+
 -----------------------------------------------------------------------------
 //FIM DO NOSSO HANDOUT
 ![](fim.png)
