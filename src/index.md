@@ -1,15 +1,6 @@
 Algoritmo Boyer-Moore de Busca em Texto
 ======
 
-Links Relacionados a Este Algoritmo
----------
-
-* [Wikipedia](https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm)
-
-* [GeeksForGeeks](https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/)
-
-------------------------------------------------------------------------------
-
 Importância da Busca em Texto
 ---------
 
@@ -21,49 +12,57 @@ Tipo Classico de Busca em Texto
 ---------
 Mas antes de se aprofundar no Boyer-Moore que é um algoritmo mais complexo, vamos antes entender um algoritmo mais simples de busca em texto. 
 
-Um exemplo de algoritmo de busca em texto mais simples é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser {red}(simples mas ineficiente). A base dele é de seguir de letra por letra no texto, comparando o padrão com o texto, até que o padrão apareça no texto (caso apareça), e é justamente isso que o torna ineficiente (já que todos os caracteres são lidos, mesmo que grande parte deles não corresponda a palavra que se deseja encontrar). Dessa forma, de forma intuitiva, a complexidade do algoritmo é $O(nm)$, onde o $n$ é *tamanho do texto* e $m$ é o *tamanho do padrão* (palavra desejada).
+Um exemplo de algoritmo de busca em texto mais simples é o [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/). Esse algoritmo é conhecido por ser {red}(simples mas ineficiente). A base dele é de seguir de letra por letra no texto, comparando o padrão com o texto, até que o padrão apareça no texto (caso apareça), e é justamente isso que o torna ineficiente (já que todos os caracteres são lidos, mesmo que grande parte deles não corresponda a palavra que se deseja encontrar).
 
 Segue uma simulação do funcionamento do algoritmo **Naive String Search**, considerando um texto $T$ e um padrão $P$, que se deseja encontrar no texto:
 
 :naive_matching_algorithm
 
-Por curiosidade, segue o código em C desse algoritmo básico de busca em texto:
-
-```c
-void Naive_String_Search(char* pat, char* txt)
-{
-    int M = strlen(pat);
-    int N = strlen(txt);
- 
-    /* A loop to slide pat[] one by one */
-    for (int i = 0; i <= N - M; i++) {
-        int j;
- 
-        /* For current index i, check for pattern match */
-        for (j = 0; j < M; j++)
-            if (txt[i + j] != pat[j])
-                break;
- 
-        if (j == M) // if pat[0...M-1] = txt[i, i+1, ...i+M-1]
-            printf("Pattern found at index %d \n", i);
-    }
-}
-```
-
 ??? Checkpoint
-
-Você consegue pensar em alguma forma de deixar a busca em texto mais rápida e eficiente?
+Considerando o a explicação do algoritmo ingênuo e o exemplo acima, qual seria a complexidade desse algoritmo? (Lembre-se que a complexidade é dada em função de $n$ sendo o tamanho do texto e $m$ o tamanho do padrão)
 
 ::: Gabarito
-Uma possível maneira de otimizar a busca seria, ao invés de passar de caractere por caractere do texto, encontrar uma maneira de **pular caracteres** que com certeza {red}(não) fazem parte da palavra que está sendo buscada.
-:::
+De forma intuitiva, a complexidade do algoritmo é $O(nm)$, pois para cada caractere do texto, é necessário comparar com todos os caracteres do padrão. O que faz com que, no pior caso, todos os caracteres do texto sejam comparados com todos os caracteres do padrão.
 ???
+
+Por curiosidade, segue o código em Python desse algoritmo básico de busca em texto:
+!!! Aviso
+( Optamos por colocar uma linguagem de alto nível para facilitar o entendimento, o código em C está disponível no link - [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/) )
+!!!
+
+```python
+def Naive_Search(pat, txt):
+    M = len(pat)
+    N = len(txt)
+ 
+    # A loop to slide pat[] one by one */
+    for i in range(N - M + 1):
+        j = 0
+ 
+        # For current index i, check
+        # for pattern match */
+        while(j < M):
+            if (txt[i + j] != pat[j]):
+                break
+            j += 1
+ 
+        if (j == M):
+            print("Pattern found at index ", i)
+```
+
+Assim, podemos entender o motivo dele ser ineficiente, é preciso percorrer um caractere por vez para encontrar o que é desejado. Mas será que existe uma forma de pular caracteres que com certeza não faz parte do padrão?
+
+Observe o exemplo a seguir: 
+
+:exemplo_naive
+
+Observando a sequência de passos acima é intuítivo perceber que é impossível que a palavra "word" esteja dentro da palavra "there", já que essa palavra nem sequer possui um caractere **w**. Fazendo com que a comparação entre todos os caracteres seja {red}(desnecessária).
+
+E é justamente pensando em uma maneira de evitar essas comparações desnecessárias, durante a busca de palavras em um texto, que o algoritmo Boyer-Moore foi desenvolvido.
 
 E então a questão que fica é:
 
-*Como podemos pular caracteres que com certeza não fazem parte da palavra que está sendo buscada?*
-
-
+*Como podemos **pular caracteres** que com certeza {red}(não) fazem parte da palavra que está sendo buscada?*
 
 Algoritmo Boyer-Moore de Busca em Texto
 ---------
@@ -76,49 +75,147 @@ A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística pa
 
 2. *The good-suffix rule*;
 
-Primeiramente vamos entender como funciona a heurística do *bad-character rule*. Considerando um texto $T$ e um padrão $P$, a heurística do *bad-character rule* consiste em, sempre que há um "mismatch" entre $P$ e $T$ (ou seja, quando um caractere do padrão não corresponde ao caractere do texto), o padrão é deslocado para a direita de forma que o caractere do texto que não corresponde ao caractere do padrão seja alinhado com a próxima ocorrência desse caractere no padrão. Caso não haja nenhuma ocorrência, todo o padrão $P$ é shiftado para depois do caractere do texto que não corresponde a nenhum caractere do padrão.
+Primeiramente vamos entender como funciona a heurística do *bad-character rule*.
 
-Segue uma curta simulação para ficar mais claro o funcionamento do **bad-character rule**:
+Observe o a simulação a seguir de uma busca em texto: 
+
+:bad_character
+
+Voltando a pergunta que foi feita anteriormente:
+
+*Como podemos **pular caracteres** que com certeza {red}(não) fazem parte da palavra que está sendo buscada?*
+
+Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "there", já que essa palavra nem sequer possui um caractere **w**, pode ser resolvida. O que é justamente o princípio da heurística do *bad-character rule*. Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver algum igual significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
 
 !!! Aviso
 É muito importante enteder que tanto a regra do *bad-character*, quanto a do *good-sufix* só funcionam efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
 !!!
 
+??? Exercício
+Seguindo uma versão mais curta do exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *bad character rule*.
 
-:bad_character
+$T$: "There would word"
 
-Por curiosidade, segue o código em C da heurística do *bad-character rule*:
-
-```c
-# define NO_OF_CHARS 256 
-
-void badCharHeuristic( string str, int size, int badchar[NO_OF_CHARS])
-{
-	int i;
-	// Initializing all occurrences as -1
-	for (i = 0; i < NO_OF_CHARS; i++)
-		badchar[i] = -1;
-
-	// Fill the actual value of last occurrence
-	// of a character
-	for (i = 0; i < size; i++)
-		badchar[(int) str[i]] = i;
-}
-```	
-
-??? Checkpoint
-
-Utilizando somente a heurística do *bad-character rule*, simule o funcionamento do algoritmo Boyer-Moore para encontrar a palavra $P$ no texto $T$:
-
-$P$: "algoritmo" 
-
-$T$ "Esse algoritmo parece interessante"
+$P$: "word" 
 
 ::: Gabarito
 ```
+iteração 1:
+There would word
+word
+
+iteração 2:
+There would word
+ word
+
+iteração 3:
+There would word
+     word
+
+iteração 4:
+There would word
+         word
+
+iteração 5:
+There would word
+            word
 ```
-:::
 ???
+
+??? Exercício
+Seguindo uma versão mais curta do exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *bad character rule*.
+
+$T$: "There would have been a time for such a word"
+
+$P$: "word" 
+
+::: Gabarito
+```
+iteração 1:
+There would have been a time for such a word
+word
+
+iteração 2:
+There would have been a time for such a word
+ word
+
+iteração 3:
+There would have been a time for such a word
+     word
+
+iteração 4:
+There would have been a time for such a word
+         word
+
+iteração 5:
+There would have been a time for such a word
+             word
+
+iteração 6:
+There would have been a time for such a word
+                 word
+
+iteração 7:
+There would have been a time for such a word
+                     word
+
+iteração 8:
+There would have been a time for such a word
+                         word
+                    
+iteração 9:
+There would have been a time for such a word
+                             word
+
+iteração 10:
+There would have been a time for such a word
+                                 word
+
+iteração 11:
+There would have been a time for such a word
+                                     word
+
+iteração 12:
+There would have been a time for such a word
+                                        word
+```
+???
+
+
+Observe que para um mesmo problema, utilizando a heurística do *bad-character rule*, a palavra foi encontrada em 12 passos, enquanto utilizando o algoritmo ingênuo foram necessários 41 passos. 
+
+Bem mais eficiente né?
+
+Por curiosidade, segue o código em Python da heurística do *bad-character rule*:
+
+```python
+# Python3 Program for Bad Character Heuristic
+# of Boyer Moore String Matching Algorithm 
+ 
+NO_OF_CHARS = 256
+
+def badCharHeuristic(string, size):
+    '''
+    The preprocessing function for
+    Boyer Moore's bad character heuristic
+    '''
+ 
+    # Initialize all occurrence as -1
+    badChar = [-1]*NO_OF_CHARS
+ 
+    # Fill the actual value of last occurrence
+    for i in range(size):
+        badChar[ord(string[i])] = i;
+ 
+    # return initialized list
+    return badChar
+```	
+
+Mas isso não é tudo, ainda existe uma outra heurística para evitar comparações desnecessárias e tornar o algoritmo ainda mais eficiente, a *good-suffix rule*.
+
+!!! Aviso
+ESPAÇAMENTO PARA DIVIDIR O QUE FOI FEITO ANTES E DEPOIS DE SER REORGANIZADO
+!!!
 
 Em relação a segunda heurística utilizada pelo algoritmo Boyer-Moore, a *good-suffix rule*, ela é utilizada para shiftar o padrão $P$ para a direita, caso haja um "mismatch" entre $P$ e $T$. Sendo assim, a heurística consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t** .
 
@@ -133,107 +230,73 @@ Segue uma curta simulação para ficar mais claro o funcionamento do **good-sufi
 
 :good_sufix
 
-Por curiosidade, segue o código em C da heurística do *good-sufix rule*:
+Por curiosidade, segue o código em Python da heurística do *good-sufix rule*:
 
-```c
-// preprocessing for strong good suffix rule
-void preprocess_strong_suffix(int *shift, int *bpos,
-                                char *pat, int m)
-{
-    // m is the length of pattern 
-    int i=m, j=m+1;
-    bpos[i]=j;
+```python
+# Python3 program for Boyer Moore Algorithm with 
+# Good Suffix heuristic to find pattern in 
+# given text string
  
-    while(i>0)
-    {
-        /*if character at position i-1 is not equivalent to
-          character at j-1, then continue searching to right
-          of the pattern for border */
-        while(j<=m && pat[i-1] != pat[j-1])
-        {
-            /* the character preceding the occurrence of t in 
-               pattern P is different than the mismatching character in P, 
-               we stop skipping the occurrences and shift the pattern
-               from i to j */
-            if (shift[j]==0)
-                shift[j] = j-i;
+# preprocessing for strong good suffix rule
+def preprocess_strong_suffix(shift, bpos, pat, m):
  
-            //Update the position of next border 
-            j = bpos[j];
-        }
-        /* p[i-1] matched with p[j-1], border is found.
-           store the  beginning position of border */
-        i--;j--;
-        bpos[i] = j; 
-    }
-}
+    # m is the length of pattern
+    i = m
+    j = m + 1
+    bpos[i] = j
  
-//Preprocessing for case 2
-void preprocess_case2(int *shift, int *bpos,
-                      char *pat, int m)
-{
-    int i, j;
-    j = bpos[0];
-    for(i=0; i<=m; i++)
-    {
-        /* set the border position of the first character of the pattern
-           to all indices in array shift having shift[i] = 0 */
-        if(shift[i]==0)
-            shift[i] = j;
+    while i > 0:
+         
+        '''if character at position i-1 is 
+        not equivalent to character at j-1, 
+        then continue searching to right 
+        of the pattern for border '''
+        while j <= m and pat[i - 1] != pat[j - 1]:
+             
+            ''' the character preceding the occurrence 
+            of t in pattern P is different than the 
+            mismatching character in P, we stop skipping
+            the occurrences and shift the pattern 
+            from i to j '''
+            if shift[j] == 0:
+                shift[j] = j - i
  
-        /* suffix becomes shorter than bpos[0], use the position of 
-           next widest border as value of j */
-        if (i==j)
-            j = bpos[j];
-    }
-}
+            # Update the position of next border
+            j = bpos[j]
+             
+        ''' p[i-1] matched with p[j-1], border is found. 
+        store the beginning position of border '''
+        i -= 1
+        j -= 1
+        bpos[i] = j
  
-/*Search for a pattern in given text using
-  Boyer Moore algorithm with Good suffix rule */
-void search(char *text, char *pat)
-{
-    // s is shift of the pattern with respect to text
-    int s=0, j;
-    int m = strlen(pat);
-    int n = strlen(text);
- 
-    int bpos[m+1], shift[m+1];
- 
-    //initialize all occurrence of shift to 0
-    for(int i=0;i<m+1;i++) shift[i]=0;
- 
-    //do preprocessing
-    preprocess_strong_suffix(shift, bpos, pat, m);
-    preprocess_case2(shift, bpos, pat, m);
- 
-    while(s <= n-m)
-    {
- 
-        j = m-1;
- 
-        /* Keep reducing index j of pattern while characters of
-             pattern and text are matching at this shift s*/
-        while(j >= 0 && pat[j] == text[s+j])
-            j--;
- 
-        /* If the pattern is present at the current shift, then index j
-             will become -1 after the above loop */
-        if (j<0)
-        {
-            printf("pattern occurs at shift = %d\n", s);
-            s += shift[0];
-        }
-        else
-            /*pat[i] != pat[s+j] so shift the pattern
-              shift[j+1] times  */
-            s += shift[j+1];
-    }
- 
-}
+# Preprocessing for case 2
+def preprocess_case2(shift, bpos, pat, m):
+    j = bpos[0]
+    for i in range(m + 1):
+         
+        ''' set the border position of the first character 
+        of the pattern to all indices in array shift
+        having shift[i] = 0 '''
+        if shift[i] == 0:
+            shift[i] = j
+             
+        ''' suffix becomes shorter than bpos[0], 
+        use the position of next widest border
+        as value of j '''
+        if i == j:
+            j = bpos[j]
 ```
 
+-----------------------------------------------------
+Links Relacionados a Este Algoritmo
+---------
 
------------------------------------------------------------------------------
+* [Wikipedia](https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm)
+
+* [GeeksForGeeks](https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/)
+
+------------------------------------------------------------------------------
 //FIM DO NOSSO HANDOUT
 ![](fim.png)
 
