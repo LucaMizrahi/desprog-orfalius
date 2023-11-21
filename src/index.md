@@ -122,8 +122,8 @@ There would word
 ```
 ???
 
-??? Exercício
-Seguindo uma versão mais curta do exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *bad character rule*.
+??? Checkpoint 
+Seguindo o exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *bad-character rule*.
 
 $T$: "There would have been a time for such a word"
 
@@ -205,7 +205,7 @@ def badCharHeuristic(string, size):
  
     # Fill the actual value of last occurrence
     for i in range(size):
-        badChar[ord(string[i])] = i;
+        badChar[ord(string[i])] = i
  
     # return initialized list
     return badChar
@@ -213,22 +213,99 @@ def badCharHeuristic(string, size):
 
 Mas isso não é tudo, ainda existe uma outra heurística para evitar comparações desnecessárias e tornar o algoritmo ainda mais eficiente, a *good-suffix rule*.
 
-!!! Aviso
-ESPAÇAMENTO PARA DIVIDIR O QUE FOI FEITO ANTES E DEPOIS DE SER REORGANIZADO
-!!!
-
-Em relação a segunda heurística utilizada pelo algoritmo Boyer-Moore, a *good-suffix rule*, ela é utilizada para shiftar o padrão $P$ para a direita, caso haja um "mismatch" entre $P$ e $T$. Sendo assim, a heurística consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t** .
-
-É então verificado se esse sufixo **t** aparece em $P$. Caso haja, $P$ é shiftado até essa recorrência do sufixo em $P$ dar "match" com o sufixo **t** %T% que foi estabelecido. Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhança 
-dê "match" em $P$ e $T$ (*mais claro no exemplo*).
-
-Um último caso seria quando não existe nenhum sufixo de $P$ em $T$, nesse caso, similiar ao *bad-character rule*, toda a palavra $P$ será shiftada para depois de onde foi encontrado o sufixo **t** de $T$.
-
-*Bem mais complexo que a outra heurística né?* Isso pode estar um pouco confuso agora, mas analizando a simulação, ficará mais fácil de entender.
-
-Segue uma curta simulação para ficar mais claro o funcionamento do **good-sufix rule**:
+Observe agora uma outra simulação de busca em texto:
 
 :good_sufix
+
+Na mesma lógica de entender como podemos pular caracteres, vemos agora um novo jeito de pular comparações desnecessárias de caracteres. 
+
+A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t**. Caso haja uma reocorrência de **t** em $P$, $P$ é shiftado até essa recorrência do sufixo em $P$ dar "match" com o sufixo **t** que foi estabelecido. Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhante dê "match" em $P$ e $T$ (*mais claro no exemplo - passo 8*). 
+
+Um último caso seria quando não existe nenhum sufixo de $P$ em $T$, nesse caso, similiar ao *bad-character rule*, toda a palavra $P$ será shiftada para depois de onde foi encontrado o sufixo **t** de $T$ ou do primeiro caractere comparado.
+
+Caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada.
+
+*Bem mais complexo que a outra heurística né?* 
+
+??? Checkpoint
+Seguindo o exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *good-sufix rule*.
+
+$T$: "There would have been a time for such a word"
+
+$P$: "word" 
+
+::: Gabarito
+```
+iteração 1:
+There would have been a time for such a word
+word
+
+iteração 2:
+There would have been a time for such a word
+    word
+
+iteração 3:
+There would have been a time for such a word
+        word
+
+iteração 4:
+There would have been a time for such a word
+            word
+
+iteração 5:
+There would have been a time for such a word
+                word
+
+iteração 6:
+There would have been a time for such a word
+                    word
+
+iteração 7:
+There would have been a time for such a word
+                        word
+
+iteração 8:
+There would have been a time for such a word
+                            word
+                    
+iteração 9:
+There would have been a time for such a word
+                                word
+
+iteração 10:
+There would have been a time for such a word
+                                    word
+
+iteração 11:
+There would have been a time for such a word
+                                        word
+```
+???
+
+??? Checkpoint
+Com base no seu entendimento dessa nova heurística, descubra em quantos passos será completada a mesma busca, utilizando o *good-sufix rule*.
+
+$T$: AACABABACBAAB
+
+$P$: CBAAB
+
+::: Gabarito
+```
+iteração 1:
+AACABABACBAAB
+CBAAB
+
+iteração 2:
+AACABABACBAAB
+     CBAAB
+
+iteração 3:
+AACABABACBAAB
+        CBAAB
+```
+???
+
+Assim como o *bad-character rule*, o *good-sufix rule* também melhora muito a quantidade de iterações necessárias para encontrar o padrão no texto.
 
 Por curiosidade, segue o código em Python da heurística do *good-sufix rule*:
 
@@ -287,6 +364,113 @@ def preprocess_case2(shift, bpos, pat, m):
         if i == j:
             j = bpos[j]
 ```
+
+No entanto é importante perceber as diferenças entre as duas heurísticas, e para isso vamos avaliar algumas situações considerando as duas heurísticas estudadas anteriormente.
+
+??? Exercício
+
+Considerando que a maior eficiência está diretamente relacionada a *quantidade de comparações desnecessárias que são evitadas*, avalie a seguinte situação e determine qual das duas heurísticas é mais eficiente para a primeira comparação da busca em texto a seguir:
+
+$T$: GTTATAGCTGATCGCGGCGTAGCGGCGAA
+
+$P$: GTAGCGGCG
+
+::: Gabarito
+```
+bad-character rule:
+iteração 1:
+GTTATAGCTGATCGCGGCGTAGCGGCGAA
+GTAGCGGCG
+
+iteração 2:
+GTTATAGCTGATCGCGGCGTAGCGGCGAA  - 6 alinhamentos pulados
+       GTAGCGGCG
+
+
+good-sufix rule:
+iteração 1:
+GTTATAGCTGATCGCGGCGTAGCGGCGAA - 0 alinhamentos pulados
+GTAGCGGCG
+
+```
+Logo, para essa comparação a heurística do *bad-character rule* é mais eficiente.
+:::
+???
+
+??? Exercício
+
+Na mesma lógica do exercício anterior, avalie a seguinte situação e determine qual das duas heurísticas é mais eficiente para a primeira comparação da busca em texto a seguir:
+
+$T$: CTGATCGCGGCGTAGCGGCGAA
+
+$P$: GTAGCGGCG
+
+::: Gabarito
+```
+bad-character rule:
+iteração 1:
+CTGATCGCGGCGTAGCGGCGAA
+GTAGCGGCG
+
+iteração 2:
+CTGATCGCGGCGTAGCGGCGAA
+ GTAGCGGCG - 0 alinhamentos pulados
+
+
+good-sufix rule:
+iteração 1:
+CTGATCGCGGCGTAGCGGCGAA
+GTAGCGGCG
+
+iteração 2:
+CTGATCGCGGCGTAGCGGCGAA
+   GTAGCGGCG - 2 alinhamentos pulados
+```
+Para essa nova comparação, o *good-sufix rule* é mais eficiente.
+:::
+???
+
+Assim, agora que entedemos as duas heurísticas do algoritmo Boyer-Moore e percebemos que para diferentes comparações uma heurística pode ser mais eficiente que a outra, podemos realmente entender de forma intuitíva o funcionamento do algoritmo Boyer-Moore.
+
+Esse funcionamento se resume basicamente em:
+
+1. Comparar $P$ e $T$ {red}(da direita para esquerda);
+2. Avaliar quantos alinhamentos podem ser pulados utilizando **cada uma das heurísticas**;
+3. Shiftar $P$ para a direita de acordo com a heurística que for mais eficiente;
+4. Repetir os passos 1, 2 e 3 para encontrar todas as ocorrências do padrão $P$ em $T$ (caso existam), até que acabe o texto. 
+
+??? Exercício De Fixação
+
+Agora que já entedemos o funcionamento do algoritmo Boyer-Moore, simule o funcionamento do algoritmo para a situação a seguir, explicitando qual heurística foi utilizada em cada comparação e quantos alinhamentos foram pulados em cada comparação.
+
+$T$: CTGATCGCGGCGTAGCGGCGAA
+
+$P$: GTAGCGGCG
+
+::: Gabarito
+```
+bad-character rule:
+iteração 1:
+CTGATCGCGGCGTAGCGGCGAA
+GTAGCGGCG
+
+iteração 2:
+CTGATCGCGGCGTAGCGGCGAA
+ GTAGCGGCG - 0 alinhamentos pulados
+
+
+good-sufix rule:
+iteração 1:
+CTGATCGCGGCGTAGCGGCGAA
+GTAGCGGCG
+
+iteração 2:
+CTGATCGCGGCGTAGCGGCGAA
+   GTAGCGGCG - 2 alinhamentos pulados
+```
+Para essa nova comparação, o *good-sufix rule* é mais eficiente.
+:::
+???
 
 -----------------------------------------------------
 Links Relacionados a Este Algoritmo
