@@ -123,7 +123,7 @@ There would word
 ???
 
 ??? Checkpoint 
-Seguindo o exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *bad-character rule*.
+Seguindo o exemplo do tipo classico de busca em texto, simule as iterações da busca em texto utilizando o *bad-character rule*.
 
 $T$: "There would have been a time for such a word"
 
@@ -283,7 +283,7 @@ There would have been a time for such a word
 ???
 
 ??? Checkpoint
-Com base no seu entendimento dessa nova heurística, descubra em quantos passos será completada a mesma busca, utilizando o *good-sufix rule*.
+Com base no seu entendimento dessa nova heurística, simule o funcionamento do *good-sufix rule* para a seguinte situação:
 
 $T$: AACABABACBAAB
 
@@ -472,6 +472,42 @@ Para essa nova comparação, o *good-sufix rule* é mais eficiente.
 :::
 ???
 
+Por fim, o ultimo tópico que falta ser abordado é a **complexidade** do algoritmo Boyer-Moore.
+
+Primeiramente, voltando as convenções utilizadaas:
+
+* O texto em que o padrão será buscado é representado por $T$;	
+* O padrão que será buscado no texto é representado por $P$;
+* O tamanho do texto é representado por $n$;
+* O tamanho do padrão é representado por $m$;
+
+Simulação do Pior caso quando $P$ não é encontrado em $T$: O(n + m)
+
+??? Exercício
+Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão não é encontrado no texto.
+::: Gabarito
+A complexidade do algoritmo Boyer-Moore quando o padrão não é encontrado no texto é $O(n + m)$, 
+:::
+???
+
+Simulação do Pior Caso (Semelhante ao Naive String Search)
+
+??? Exercício
+Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto, porém o algoritmo não consegue otimizar a busca por meio de suas heurísticas.
+::: Gabarito
+A complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto, porém o algoritmo não consegue otimizar a busca por meio de suas heurísticas é $O(nm)$, já que de forma similar ao algoritmo ingênuo, todos os caracteres do texto são comparados com todos os caracteres do padrão.
+:::
+???
+
+Simulação do Melhor Caso (Quando o padrão é encontrado no texto)
+
+??? Exercício
+Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas.
+::: Gabarito
+A complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas é $O(n/m)$, já que o algoritmo consegue pular $m$ alinhamentos a cada iteração.
+:::
+???
+
 -----------------------------------------------------
 Links Relacionados a Este Algoritmo
 ---------
@@ -483,79 +519,3 @@ Links Relacionados a Este Algoritmo
 ------------------------------------------------------------------------------
 //FIM DO NOSSO HANDOUT
 ![](fim.png)
-
-
-assim como
-
-* listas;
-
-* não-ordenadas
-
-e imagens. Lembre que todas as imagens devem estar em uma subpasta *img*.
-
-
-
-Para tabelas, usa-se a [notação do
-MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html),
-que é muito flexível. Vale a pena abrir esse link para saber todas as
-possibilidades.
-
-| coluna a | coluna b |
-|----------|----------|
-| 1        | 2        |
-
-Ao longo de um texto, você pode usar *itálico*, **negrito**, {red}(vermelho) e
-[[tecla]]. Também pode usar uma equação LaTeX: $f(n) \leq g(n)$. Se for muito
-grande, você pode isolá-la em um parágrafo.
-
-$$\lim_{n \rightarrow \infty} \frac{f(n)}{g(n)} \leq 1$$
-
-Para inserir uma animação, use `md :` seguido do nome de uma pasta onde as
-imagens estão. Essa pasta também deve estar em *img*.
-
-:bubble
-
-Você também pode inserir código, inclusive especificando a linguagem.
-
-``` py
-def f():
-    print('hello world')
-```
-
-``` c
-void f() {
-    printf("hello world\n");
-}
-```
-
-Se não especificar nenhuma, o código fica com colorização de terminal.
-
-```
-hello world
-```
-
-
-!!! Aviso
-Este é um exemplo de aviso, entre `md !!!`.
-!!!
-
-
-??? Exercício
-
-Este é um exemplo de exercício, entre `md ???`.
-
-::: Gabarito
-Este é um exemplo de gabarito, entre `md :::`.
-:::
-
-???
-
-
-??? Checkpoint
-
-Este é um exemplo de Checkpoint, entre `md ???`.
-
-::: Gabarito
-Este é um exemplo de gabarito, entre `md :::`.
-:::
-???
