@@ -122,66 +122,6 @@ There would word
 ```
 ???
 
-??? Checkpoint 
-Seguindo o exemplo do tipo classico de busca em texto, simule as iterações da busca em texto utilizando o *bad-character rule*.
-
-$T$: "There would have been a time for such a word"
-
-$P$: "word" 
-
-::: Gabarito
-```
-iteração 1:
-There would have been a time for such a word
-word
-
-iteração 2:
-There would have been a time for such a word
- word
-
-iteração 3:
-There would have been a time for such a word
-     word
-
-iteração 4:
-There would have been a time for such a word
-         word
-
-iteração 5:
-There would have been a time for such a word
-             word
-
-iteração 6:
-There would have been a time for such a word
-                 word
-
-iteração 7:
-There would have been a time for such a word
-                     word
-
-iteração 8:
-There would have been a time for such a word
-                         word
-                    
-iteração 9:
-There would have been a time for such a word
-                             word
-
-iteração 10:
-There would have been a time for such a word
-                                 word
-
-iteração 11:
-There would have been a time for such a word
-                                     word
-
-iteração 12:
-There would have been a time for such a word
-                                        word
-```
-???
-
-
 Observe que para um mesmo problema, utilizando a heurística do *bad-character rule*, a palavra foi encontrada em 12 passos, enquanto utilizando o algoritmo ingênuo foram necessários 41 passos. 
 
 Bem mais eficiente né?
@@ -226,61 +166,6 @@ Um último caso seria quando não existe nenhum sufixo de $P$ em $T$, nesse caso
 Caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada.
 
 *Bem mais complexo que a outra heurística né?* 
-
-??? Checkpoint
-Seguindo o exemplo do tipo classico de busca em texto, descubra em quantos passos será completada a mesma busca, agora utilizando o *good-sufix rule*.
-
-$T$: "There would have been a time for such a word"
-
-$P$: "word" 
-
-::: Gabarito
-```
-iteração 1:
-There would have been a time for such a word
-word
-
-iteração 2:
-There would have been a time for such a word
-    word
-
-iteração 3:
-There would have been a time for such a word
-        word
-
-iteração 4:
-There would have been a time for such a word
-            word
-
-iteração 5:
-There would have been a time for such a word
-                word
-
-iteração 6:
-There would have been a time for such a word
-                    word
-
-iteração 7:
-There would have been a time for such a word
-                        word
-
-iteração 8:
-There would have been a time for such a word
-                            word
-                    
-iteração 9:
-There would have been a time for such a word
-                                word
-
-iteração 10:
-There would have been a time for such a word
-                                    word
-
-iteração 11:
-There would have been a time for such a word
-                                        word
-```
-???
 
 ??? Checkpoint
 Com base no seu entendimento dessa nova heurística, simule o funcionamento do *good-sufix rule* para a seguinte situação:
@@ -473,7 +358,7 @@ CTGATCGCGGCGTAGCGGCGAA
 
 Por fim, o ultimo tópico que falta ser abordado é a **complexidade** do algoritmo Boyer-Moore.
 
-Primeiramente, voltando as convenções utilizadaas:
+Primeiramente, voltando as convenções utilizadas:
 
 * O texto em que o padrão será buscado é representado por $T$;	
 * O padrão que será buscado no texto é representado por $P$;
