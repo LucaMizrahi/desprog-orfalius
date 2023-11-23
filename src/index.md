@@ -468,7 +468,6 @@ iteração 2:
 CTGATCGCGGCGTAGCGGCGAA
    GTAGCGGCG - 2 alinhamentos pulados
 ```
-Para essa nova comparação, o *good-sufix rule* é mais eficiente.
 :::
 ???
 
