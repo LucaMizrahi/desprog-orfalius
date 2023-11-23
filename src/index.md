@@ -122,9 +122,7 @@ There would word
 ```
 ???
 
-Observe que para um mesmo problema, utilizando a heurística do *bad-character rule*, a palavra foi encontrada em 12 passos, enquanto utilizando o algoritmo ingênuo foram necessários 41 passos. 
-
-Bem mais eficiente né?
+Observe que, utilizando a heurística do *bad-character rule*, é possível pular diversos alinhamentos, facilitando encontrar o padrão no texto, de forma mais eficiente.
 
 Por curiosidade, segue o código em Python da heurística do *bad-character rule*:
 
@@ -268,14 +266,18 @@ GTTATAGCTGATCGCGGCGTAGCGGCGAA
 GTAGCGGCG
 
 iteração 2:
-GTTATAGCTGATCGCGGCGTAGCGGCGAA  - 6 alinhamentos pulados
+GTTATAGCTGATCGCGGCGTAGCGGCGAA  - 6 alinhamentos pulados (7 caracteres)
        GTAGCGGCG
 
 
 good-sufix rule:
 iteração 1:
-GTTATAGCTGATCGCGGCGTAGCGGCGAA - 0 alinhamentos pulados
+GTTATAGCTGATCGCGGCGTAGCGGCGAA - 
 GTAGCGGCG
+
+iteração 2:
+GTTATAGCTGATCGCGGCGTAGCGGCGAA - 0 alinhamentos pulados (1 caractere)
+ GTAGCGGCG
 
 ```
 Logo, para essa comparação a heurística do *bad-character rule* é mais eficiente.
@@ -299,7 +301,7 @@ GTAGCGGCG
 
 iteração 2:
 CTGATCGCGGCGTAGCGGCGAA
- GTAGCGGCG - 0 alinhamentos pulados
+ GTAGCGGCG - 0 alinhamentos pulados (1 caractere)
 
 
 good-sufix rule:
@@ -309,7 +311,7 @@ GTAGCGGCG
 
 iteração 2:
 CTGATCGCGGCGTAGCGGCGAA
-   GTAGCGGCG - 2 alinhamentos pulados
+   GTAGCGGCG - 2 alinhamentos pulados (3 caracteres)
 ```
 Para essa nova comparação, o *good-sufix rule* é mais eficiente.
 :::
@@ -326,35 +328,75 @@ Esse funcionamento se resume basicamente em:
 
 ??? Exercício De Fixação
 
-Agora que já entedemos o funcionamento do algoritmo Boyer-Moore, simule o funcionamento do algoritmo para a situação a seguir, explicitando qual heurística foi utilizada em cada comparação e quantos alinhamentos foram pulados em cada comparação.
+Agora que já entedemos o funcionamento do algoritmo Boyer-Moore, simule o funcionamento do algoritmo completo para a situação a seguir, explicitando qual heurística foi utilizada em cada comparação e quantos alinhamentos foram pulados em cada comparação.
 
-$T$: CTGATCGCGGCGTAGCGGCGAA
+$T$: JULIETTHOTELTANGOFOXTROT
 
-$P$: GTAGCGGCG
+$P$: FOXTROT
 
 ::: Gabarito
 ```
+Comparação 1: (Ambas as heurísticas podem ser utilizadas)
+JULIETTHOTELTANGOFOXTROT
+FOXTROT
+
 bad-character rule:
-iteração 1:
-CTGATCGCGGCGTAGCGGCGAA
-GTAGCGGCG
-
-iteração 2:
-CTGATCGCGGCGTAGCGGCGAA
- GTAGCGGCG - 0 alinhamentos pulados
-
+JULIETTHOTELTANGOFOXTROT
+   FOXTROT - 2 alinhamentos pulados (3 caracteres)
 
 good-sufix rule:
-iteração 1:
-CTGATCGCGGCGTAGCGGCGAA
-GTAGCGGCG
+JULIETTHOTELTANGOFOXTROT
+   FOXTROT - 2 alinhamentos pulados (3 caracteres)
 
-iteração 2:
-CTGATCGCGGCGTAGCGGCGAA
-   GTAGCGGCG - 2 alinhamentos pulados
+----------------------------------------------------------------------------
+
+Comparação 2: (A heurística do good-sufix rule deve ser utilizada)
+JULIETTHOTELTANGOFOXTROT
+   FOXTROT
+
+bad-character rule:
+JULIETTHOTELTANGOFOXTROT
+        FOXTROT - 3 alinhamentos pulados (4 caracteres)
+
+good-sufix rule:
+JULIETTHOTELTANGOFOXTROT
+          FOXTROT - 5 alinhamentos pulados (6 caractere)
+        
+----------------------------------------------------------------------------
+
+Comparação 3: (Ambas as heurísticas podem ser utilizadas)
+JULIETTHOTELTANGOFOXTROT
+          FOXTROT
+
+bad-character rule:
+JULIETTHOTELTANGOFOXTROT
+           FOXTROT - 0 alinhamentos pulados (1 caractere)
+
+good-sufix rule:
+JULIETTHOTELTANGOFOXTROT
+           FOXTROT - 0 alinhamentos pulados (1 caractere)
+
+----------------------------------------------------------------------------
+
+Comparação 4: (A heurística do bad-character rule deve ser utilizada)
+JULIETTHOTELTANGOFOXTROT
+           FOXTROT
+
+bad-character rule:
+JULIETTHOTELTANGOFOXTROT
+                 FOXTROT - 4 alinhamentos pulados (5 caracteres)
+
+good-sufix rule:
+JULIETTHOTELTANGOFOXTROT
+            FOXTROT - 0 alinhamentos pulados (1 caractere)
 ```
+Padrão encontrado encontrado no índice **17** do texto!
 :::
 ???
+
+!!! Aviso
+Caso tenha curiosidade, o código completo do algoritmo Boyer-Moore em Python ou C está disponível nos links ao final do handout.
+!!!
 
 Por fim, o ultimo tópico que falta ser abordado é a **complexidade** do algoritmo Boyer-Moore.
 
@@ -365,19 +407,12 @@ Primeiramente, voltando as convenções utilizadas:
 * O tamanho do texto é representado por $n$;
 * O tamanho do padrão é representado por $m$;
 
-Simulação do Pior caso quando $P$ não é encontrado em $T$: O(n + m)
-
-??? Exercício
-Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão não é encontrado no texto.
-::: Gabarito
-A complexidade do algoritmo Boyer-Moore quando o padrão não é encontrado no texto é $O(n + m)$, 
-:::
-???
-
-Simulação do Pior Caso (Semelhante ao Naive String Search)
+Simulação do Pior Caso (Semelhante ao Naive String Search) - P é igual a T
 
 ??? Exercício
 Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto, porém o algoritmo não consegue otimizar a busca por meio de suas heurísticas.
+
+**DICA** : Relembre o algoritmo ingênuo de busca em texto apresentado no começo do handout.
 ::: Gabarito
 A complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto, porém o algoritmo não consegue otimizar a busca por meio de suas heurísticas é $O(nm)$, já que de forma similar ao algoritmo ingênuo, todos os caracteres do texto são comparados com todos os caracteres do padrão.
 :::
@@ -387,6 +422,8 @@ Simulação do Melhor Caso (Quando o padrão é encontrado no texto)
 
 ??? Exercício
 Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas.
+
+**DICA** : Relembre as iterações do algortimo Boyer-Moore por meio de suas heurísticas.
 ::: Gabarito
 A complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas é $O(n/m)$, já que o algoritmo consegue pular $m$ alinhamentos a cada iteração.
 :::
