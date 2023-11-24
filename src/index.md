@@ -390,7 +390,7 @@ good-sufix rule:
 JULIETTHOTELTANGOFOXTROT
             FOXTROT - 0 alinhamentos pulados (1 caractere)
 ```
-Padrão encontrado encontrado no índice **17** do texto!
+Padrão encontrado no índice **17** do texto!
 :::
 ???
 
@@ -407,7 +407,9 @@ Primeiramente, voltando as convenções utilizadas:
 * O tamanho do texto é representado por $n$;
 * O tamanho do padrão é representado por $m$;
 
-Simulação do Pior Caso (Semelhante ao Naive String Search) - P é igual a T
+Agora observe a seguinte simulação de busca em texto, utilizando o algoritmo Boyer-Moore:
+
+:Simulacao_PiorCaso
 
 ??? Exercício
 Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto, porém o algoritmo não consegue otimizar a busca por meio de suas heurísticas.
@@ -418,7 +420,9 @@ A complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto,
 :::
 ???
 
-Simulação do Melhor Caso (Quando o padrão é encontrado no texto)
+Para finalizar, observe essa última simulação de busca em texto, utilizando o algoritmo Boyer-Moore:
+
+:Simulacao_MelhorCaso
 
 ??? Exercício
 Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas.
