@@ -124,30 +124,9 @@ There would word
 
 Observe que, utilizando a heurística do *bad-character rule*, é possível pular diversos alinhamentos, facilitando encontrar o padrão no texto, de forma mais eficiente.
 
-Por curiosidade, segue o código em Python da heurística do *bad-character rule*:
-
-```python
-# Python3 Program for Bad Character Heuristic
-# of Boyer Moore String Matching Algorithm 
- 
-NO_OF_CHARS = 256
-
-def badCharHeuristic(string, size):
-    '''
-    The preprocessing function for
-    Boyer Moore's bad character heuristic
-    '''
- 
-    # Initialize all occurrence as -1
-    badChar = [-1]*NO_OF_CHARS
- 
-    # Fill the actual value of last occurrence
-    for i in range(size):
-        badChar[ord(string[i])] = i
- 
-    # return initialized list
-    return badChar
-```	
+!!! Aviso
+Por curiosidade, o código em Python da heurística do *bad-character rule* está no **final** do handout. 
+!!!
 
 Mas isso não é tudo, ainda existe uma outra heurística para evitar comparações desnecessárias e tornar o algoritmo ainda mais eficiente, a *good-suffix rule*.
 
@@ -190,63 +169,9 @@ AACABABACBAAB
 
 Assim como o *bad-character rule*, o *good-sufix rule* também melhora muito a quantidade de iterações necessárias para encontrar o padrão no texto.
 
-Por curiosidade, segue o código em Python da heurística do *good-sufix rule*:
-
-```python
-# Python3 program for Boyer Moore Algorithm with 
-# Good Suffix heuristic to find pattern in 
-# given text string
- 
-# preprocessing for strong good suffix rule
-def preprocess_strong_suffix(shift, bpos, pat, m):
- 
-    # m is the length of pattern
-    i = m
-    j = m + 1
-    bpos[i] = j
- 
-    while i > 0:
-         
-        '''if character at position i-1 is 
-        not equivalent to character at j-1, 
-        then continue searching to right 
-        of the pattern for border '''
-        while j <= m and pat[i - 1] != pat[j - 1]:
-             
-            ''' the character preceding the occurrence 
-            of t in pattern P is different than the 
-            mismatching character in P, we stop skipping
-            the occurrences and shift the pattern 
-            from i to j '''
-            if shift[j] == 0:
-                shift[j] = j - i
- 
-            # Update the position of next border
-            j = bpos[j]
-             
-        ''' p[i-1] matched with p[j-1], border is found. 
-        store the beginning position of border '''
-        i -= 1
-        j -= 1
-        bpos[i] = j
- 
-# Preprocessing for case 2
-def preprocess_case2(shift, bpos, pat, m):
-    j = bpos[0]
-    for i in range(m + 1):
-         
-        ''' set the border position of the first character 
-        of the pattern to all indices in array shift
-        having shift[i] = 0 '''
-        if shift[i] == 0:
-            shift[i] = j
-             
-        ''' suffix becomes shorter than bpos[0], 
-        use the position of next widest border
-        as value of j '''
-        if i == j:
-            j = bpos[j]
-```
+!!! Aviso
+Por curiosidade, o código em Python da heurística do *good-sufix rule* está no **final** do handout
+!!!
 
 No entanto é importante perceber as diferenças entre as duas heurísticas, e para isso vamos avaliar algumas situações considerando as duas heurísticas estudadas anteriormente.
 
@@ -432,6 +357,99 @@ Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Mo
 A complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas é $O(n/m)$, já que o algoritmo consegue pular $m$ alinhamentos a cada iteração.
 :::
 ???
+
+Ao final desse handout fica claro que o algoritmo ingênuo de busca em texto é muito pouco eficiente, principalmente quando pensamos em situações de texto grandes e que possuem muitos caracteres a serem percorridos e comparados.
+
+E é justamente por isso que algoritmos como o Boyer-Moore são tão importantes, pois eles conseguem otimizar a busca em texto de forma muito mais eficiente, tornando ferramentas como o "control + f" possíveis de serem implementadas de forma satisfatória.
+
+------------------------------------------------------------------------------
+Códigos
+-------
+
+Segue o código em Python da heurística do *bad-character rule*:
+
+```python
+# Python3 Program for Bad Character Heuristic
+# of Boyer Moore String Matching Algorithm 
+ 
+NO_OF_CHARS = 256
+
+def badCharHeuristic(string, size):
+    '''
+    The preprocessing function for
+    Boyer Moore's bad character heuristic
+    '''
+ 
+    # Initialize all occurrence as -1
+    badChar = [-1]*NO_OF_CHARS
+ 
+    # Fill the actual value of last occurrence
+    for i in range(size):
+        badChar[ord(string[i])] = i
+ 
+    # return initialized list
+    return badChar
+```	
+
+Segue o código em Python da heurística do *good-sufix rule*:
+
+```python
+# Python3 program for Boyer Moore Algorithm with 
+# Good Suffix heuristic to find pattern in 
+# given text string
+ 
+# preprocessing for strong good suffix rule
+def preprocess_strong_suffix(shift, bpos, pat, m):
+ 
+    # m is the length of pattern
+    i = m
+    j = m + 1
+    bpos[i] = j
+ 
+    while i > 0:
+         
+        '''if character at position i-1 is 
+        not equivalent to character at j-1, 
+        then continue searching to right 
+        of the pattern for border '''
+        while j <= m and pat[i - 1] != pat[j - 1]:
+             
+            ''' the character preceding the occurrence 
+            of t in pattern P is different than the 
+            mismatching character in P, we stop skipping
+            the occurrences and shift the pattern 
+            from i to j '''
+            if shift[j] == 0:
+                shift[j] = j - i
+ 
+            # Update the position of next border
+            j = bpos[j]
+             
+        ''' p[i-1] matched with p[j-1], border is found. 
+        store the beginning position of border '''
+        i -= 1
+        j -= 1
+        bpos[i] = j
+ 
+# Preprocessing for case 2
+def preprocess_case2(shift, bpos, pat, m):
+    j = bpos[0]
+    for i in range(m + 1):
+         
+        ''' set the border position of the first character 
+        of the pattern to all indices in array shift
+        having shift[i] = 0 '''
+        if shift[i] == 0:
+            shift[i] = j
+             
+        ''' suffix becomes shorter than bpos[0], 
+        use the position of next widest border
+        as value of j '''
+        if i == j:
+            j = bpos[j]
+```
+
+
 
 -----------------------------------------------------
 Links Relacionados a Este Algoritmo
