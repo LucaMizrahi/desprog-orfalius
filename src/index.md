@@ -142,12 +142,13 @@ iteração 5:
 There would word
             word
 ```
+Serão realizadas **5** iterações para encontrar o padrão no texto.
 ???
 
 Observe que, utilizando a heurística do *bad-character rule*, é possível pular diversos alinhamentos, facilitando encontrar o padrão no texto, de forma mais eficiente.
 
 !!! Aviso
-Por curiosidade, o código em Python da heurística do *bad-character rule* está no **final** do handout. 
+Por curiosidade, o código em Python/C da heurística do *bad-character rule* está no **final** do handout. 
 !!!
 
 Mas isso não é tudo, ainda existe uma outra heurística para evitar comparações desnecessárias e tornar o algoritmo ainda mais eficiente, a *good-suffix rule*.
@@ -164,9 +165,9 @@ A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direi
 
 Um último caso seria quando não existe nenhum sufixo de $P$ em $T$, nesse caso, similiar ao *bad-character rule*, toda a palavra $P$ será shiftada para depois de onde foi encontrado o sufixo **t** de $T$ ou do primeiro caractere comparado.
 
-Caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada.
+Caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada (pula apenas 1 caractere, similar ao algoritmo ingênuo de busca em texto).
 
-*Bem mais complexo que a outra heurística né?* 
+*Um pouco mais complexo que a outra heurística né?* 
 
 ??? Checkpoint
 Com base no seu entendimento dessa nova heurística, simule o funcionamento do *good-sufix rule* para a seguinte situação:
