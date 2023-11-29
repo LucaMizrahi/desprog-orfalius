@@ -19,36 +19,13 @@ Segue uma simulação do funcionamento do algoritmo **Naive String Search**, con
 :naive_matching_algorithm
 
 ??? Checkpoint
-Considerando o a explicação do algoritmo ingênuo e o exemplo acima, qual seria a complexidade desse algoritmo? (Lembre-se que a complexidade é dada em função de $n$ sendo o tamanho do texto e $m$ o tamanho do padrão)
+Considerando o a explicação do algoritmo ingênuo e o exemplo acima, qual seria a complexidade desse algoritmo (*No Pior Caso*)? 
+
+(Lembre-se que a complexidade é dada em função de $n$ sendo o tamanho do texto e $m$ o tamanho do padrão)
 
 ::: Gabarito
 De forma intuitiva, a complexidade do algoritmo é $O(nm)$, pois para cada caractere do texto, é necessário comparar com todos os caracteres do padrão. O que faz com que, no pior caso, todos os caracteres do texto sejam comparados com todos os caracteres do padrão.
 ???
-
-Por curiosidade, segue o código em Python desse algoritmo básico de busca em texto:
-!!! Aviso
-( Optamos por colocar uma linguagem de alto nível para facilitar o entendimento, o código em C está disponível no link - [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/) )
-!!!
-
-```python
-def Naive_Search(pat, txt):
-    M = len(pat)
-    N = len(txt)
- 
-    # A loop to slide pat[] one by one */
-    for i in range(N - M + 1):
-        j = 0
- 
-        # For current index i, check
-        # for pattern match */
-        while(j < M):
-            if (txt[i + j] != pat[j]):
-                break
-            j += 1
- 
-        if (j == M):
-            print("Pattern found at index ", i)
-```
 
 Assim, podemos entender o motivo dele ser ineficiente, é preciso percorrer um caractere por vez para encontrar o que é desejado. Mas será que existe uma forma de pular caracteres que com certeza não faz parte do padrão?
 
@@ -85,7 +62,48 @@ Voltando a pergunta que foi feita anteriormente:
 
 *Como podemos **pular caracteres** que com certeza {red}(não) fazem parte da palavra que está sendo buscada?*
 
-Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "there", já que essa palavra nem sequer possui um caractere **w**, pode ser resolvida. O que é justamente o princípio da heurística do *bad-character rule*. Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver algum igual significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
+??? Checkpoint
+Considere a seguinte comparação:
+
+$T$: "They"
+
+$P$: "word" 
+
+Considerando o que já foi falado em relação ao algoritmo ingênuo, faz sentido comparar o todos os caracteres de "word" com todos os caracteres de "they"?
+
+::: Gabarito
+**Não**, pois é impossível que a palavra "word" esteja dentro da palavra "they", já que essa palavra não possui caracteres em comum com a palavra "word".
+???
+
+??? Checkoint 
+Considerando a mesma comparação anterior:
+
+$T$: "They"
+
+$P$: "word"
+
+Agora, **com base na simulação da heurística do *bad-character rule***, seria uma maneira inteligente comparar o último caractere de "word" com o último caractere de "they" e caso eles não sejam iguais tentar encontrar esse primeiro caractere **y** de "they" dentro de "word"?
+
+::: Gabarito
+**Sim**, pois a única possibilidade de encontrar a palavra "word" dentro de they seria se houvesse um caractere *y* dentro de "word".
+???
+
+??? Checkpoint
+Considerando a mesma comparação anterior:
+
+$T$: "They"
+
+$P$: "word"
+
+Por fim, se o caractere *y* que foi comparado com o último caractere de "word", não existe dentro da palavra "word", seria necessário comparar os outros caracteres de "word" com o último caractere de "they"?
+
+::: Gabarito
+**Não**, pois se o último caractere de "they" não existe dentro de "word", é impossível que a palavra "word" esteja dentro de "they", logo não é necessário comparar os outros caracteres de "word" com o último caractere de "they".
+???
+
+Considerando essas três perguntas que foram feitas, o entendimento da heurística do *bad-character rule* fica mais claro.
+
+Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "they", já que o *padrão* não possui um caractere **y**. O que é justamente o princípio da heurística do *bad-character rule*. Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver algum igual significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
 
 !!! Aviso
 É muito importante enteder que tanto a regra do *bad-character*, quanto a do *good-sufix* só funcionam efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
@@ -134,7 +152,9 @@ Observe agora uma outra simulação de busca em texto:
 
 :good_sufix
 
-Na mesma lógica de entender como podemos pular caracteres, vemos agora um novo jeito de pular comparações desnecessárias de caracteres. 
+Na mesma lógica de entender como podemos pular caracteres, a heurística do good-sufix nada mais é do que novo jeito de pular comparações desnecessárias de caracteres.
+
+
 
 A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t**. Caso haja uma reocorrência de **t** em $P$, $P$ é shiftado até essa recorrência do sufixo em $P$ dar "match" com o sufixo **t** que foi estabelecido. Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhante dê "match" em $P$ e $T$ (*mais claro no exemplo - passo 8*). 
 
@@ -365,6 +385,31 @@ E é justamente por isso que algoritmos como o Boyer-Moore são tão importantes
 ------------------------------------------------------------------------------
 Códigos
 -------
+
+Por curiosidade, segue o código em Python desse algoritmo básico de busca em texto:
+!!! Aviso
+( Optamos por colocar uma linguagem de alto nível para facilitar o entendimento, o código em C está disponível no link - [Naive String Search](https://www.geeksforgeeks.org/naive-algorithm-for-pattern-searching/) )
+!!!
+
+```python
+def Naive_Search(pat, txt):
+    M = len(pat)
+    N = len(txt)
+ 
+    # A loop to slide pat[] one by one */
+    for i in range(N - M + 1):
+        j = 0
+ 
+        # For current index i, check
+        # for pattern match */
+        while(j < M):
+            if (txt[i + j] != pat[j]):
+                break
+            j += 1
+ 
+        if (j == M):
+            print("Pattern found at index ", i)
+```
 
 Segue o código em Python da heurística do *bad-character rule*:
 
