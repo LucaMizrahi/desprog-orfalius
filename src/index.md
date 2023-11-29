@@ -103,7 +103,11 @@ Por fim, se o caractere *y* que foi comparado com o último caractere de "word",
 
 Considerando essas três perguntas que foram feitas, o entendimento da heurística do *bad-character rule* fica mais claro.
 
-Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "they", já que o *padrão* não possui um caractere **y**. O que é justamente o princípio da heurística do *bad-character rule*. Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver algum igual significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
+Segue a definição formal dessa heurística:
+
+Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "they", já que o *padrão* não possui um caractere "**y**". O que é justamente o princípio da heurística do *bad-character rule*. 
+
+Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver algum igual significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
 
 !!! Aviso
 É muito importante enteder que tanto a regra do *bad-character*, quanto a do *good-sufix* só funcionam efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
