@@ -54,7 +54,7 @@ A eficiência do algoritmo Boyer-Moore se destaca pelo uso de uma heurística pa
 
 Primeiramente vamos entender como funciona a heurística do *bad-character rule*.
 
-Observe o a simulação a seguir de uma busca em texto: 
+Observe o a simulação a seguir de uma busca em texto utilizando essa heurística: 
 
 :bad_character
 
@@ -105,9 +105,9 @@ Considerando essas três perguntas que foram feitas, o entendimento da heurísti
 
 Segue a definição formal dessa heurística:
 
-Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "they", já que o *padrão* não possui um caractere "**y**". O que é justamente o princípio da heurística do *bad-character rule*. 
+Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "they", devido ao fato do *padrão* não possuir um caractere "**y**" é justamente o princípio da heurística do *bad-character rule*. 
 
-Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver algum igual significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
+Sempre que houver um mismatch, o caractere de $T$ que diferiu do caractere de $P$ é comparado com os demais caracteres a esquerda, se houver alguma reocorrência, significa que a palavra buscada ainda pode estar na região que foi comparada, caso contrário, o padrão é shiftado para depois do caractere que não corresponde a nenhum caractere do padrão, já que é impossível que a palavra buscada esteja na região que foi comparada. 
 
 !!! Aviso
 É muito importante enteder que tanto a regra do *bad-character*, quanto a do *good-sufix* só funcionam efetivamente, pois o padrão é comparado com o texto da {red}(direita para a esquerda) (**como indicado pela seta pontilhada na simulação**), diferentemente do algoritmo de busca em texto convencional apresentado no começo do handout.
@@ -153,24 +153,63 @@ Por curiosidade, o código em Python/C da heurística do *bad-character rule* es
 
 Mas isso não é tudo, ainda existe uma outra heurística para evitar comparações desnecessárias e tornar o algoritmo ainda mais eficiente, a *good-suffix rule*.
 
-Observe agora uma outra simulação de busca em texto:
+Observe agora uma outra simulação de busca em texto utilizando essa heurística:
 
 :good_sufix
 
 Na mesma lógica de entender como podemos pular caracteres, a heurística do good-sufix nada mais é do que novo jeito de pular comparações desnecessárias de caracteres.
 
+??? Checkpoint
+Tendo em vista a simulação anterior, encontre os caracteres em comum para a seguinte comparação: 
 
+$T$: "ACABBAAB"
 
-A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t**. Caso haja uma reocorrência de **t** em $P$, $P$ é shiftado até essa recorrência do sufixo em $P$ dar "match" com o sufixo **t** que foi estabelecido. Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhante dê "match" em $P$ e $T$ (*mais claro no exemplo - passo 8*). 
+$P$: "AABAB"
 
-Um último caso seria quando não existe nenhum sufixo de $P$ em $T$, nesse caso, similiar ao *bad-character rule*, toda a palavra $P$ será shiftada para depois de onde foi encontrado o sufixo **t** de $T$ ou do primeiro caractere comparado.
+::: Gabarito
+Utilizando a mesma lógica da simulação anterior, percebemos que o segmento **"AB"** é o mesmo para o texto e para o padrão comparado. 
+???
 
-Caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada (pula apenas 1 caractere, similar ao algoritmo ingênuo de busca em texto).
+??? Checkpoint
+Seguindo o exemplo anterior:
+
+$T$: "ACABBAAB"
+
+$P$: "AABAB"
+
+Sabendo que o segmento **"AB"** é o mesmo para o texto e para o padrão comparado, e pensando no funcionamento da heurística do *bad-character rule*, seria uma boa ideia identificar se esse segmento **"AB"** aparece novamente no padrão?
+::: Gabarito
+**Sim**, pois se esse segmento aparecer novamente no padrão, significa que o padrão pode estar na região que foi comparada.
+???
+
+??? Checkpoint
+Pensando agora em um segundo exemplo:
+
+$T$: "ACABBAAB"
+
+$P$: "ACBAB"
+
+Ainda lembrando da heurística do *bad-character rule*, o que seria mais eficiente fazer nesse caso, já que o segmento **"AB"** não aparece novamente no padrão?
+::: Gabarito
+Nesse caso, como o segmento **"AB"** não aparece novamente no padrão, o mais eficiente seria shiftar o padrão para depois do segmento **"AB"** que foi encontrado no texto, já que é impossível que o padrão esteja na região que foi comparada.
+???
+
+Com base nessas três perguntas, o entendimento da heurística do *good-sufix rule* fica mais claro.
+
+Segue a definição formal dessa heurística:
+
+A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t**. Caso haja uma reocorrência de **t** em $P$, $P$ é shiftado até essa recorrência do sufixo em $P$ dar "match" com o sufixo **t** que foi estabelecido.
+
+No caso em que não existe nenhuma reocorrência do sufixo de $P$ em $T$, similiar ao *bad-character rule*, toda a palavra $P$ será shiftada para depois de onde foi encontrado o sufixo **t** de $T$ ou do primeiro caractere comparado.
+
+Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhante dê "match" em $P$ e $T$ (*mais claro no exemplo - passo 8*). 
+
+Outro caso diferente é caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada (pula apenas 1 caractere, similar ao algoritmo ingênuo de busca em texto).
 
 *Um pouco mais complexo que a outra heurística né?* 
 
-??? Checkpoint
-Com base no seu entendimento dessa nova heurística, simule o funcionamento do *good-sufix rule* para a seguinte situação:
+??? Exercício
+Com base no seu entendimento dessa nova heurística, descubra em quantos passos será finalizada a busca a seguir, utilizando a heurística do *good-sufix rule* para a seguinte situação:
 
 $T$: AACABABACBAAB
 
@@ -190,9 +229,10 @@ iteração 3:
 AACABABACBAAB
         CBAAB
 ```
+Serão realizadas **3** iterações para encontrar o padrão no texto.
 ???
 
-Assim como o *bad-character rule*, o *good-sufix rule* também melhora muito a quantidade de iterações necessárias para encontrar o padrão no texto.
+Assim como o *bad-character rule*, o *good-sufix rule* também facilita a busca em texto ao diminuir a quantidade de iterações necessárias para encontrar o padrão no texto.
 
 !!! Aviso
 Por curiosidade, o código em Python da heurística do *good-sufix rule* está no **final** do handout
@@ -267,7 +307,15 @@ Para essa nova comparação, o *good-sufix rule* é mais eficiente.
 :::
 ???
 
-Assim, agora que entedemos as duas heurísticas do algoritmo Boyer-Moore e percebemos que para diferentes comparações uma heurística pode ser mais eficiente que a outra, podemos realmente entender de forma intuitíva o funcionamento do algoritmo Boyer-Moore.
+??? Checkpoint
+Os últimos exercícios deixam claro que apesar de possuírem o mesmo objetivo, as duas heurísticas possuem {red}(funcionamentos diferentes) e podem ser mais eficientes em situações diferentes.
+
+Sendo assim, seria lógico pensar que, buscando maximizar a eficiência ao pular o máximo de caracteres, a melhor opção seria utilizar as duas heurísticas ao mesmo tempo, certo?
+::: Gabarito
+**Sim**, e é exatamente isso que o algoritmo Boyer-Moore faz, ambas as heurísticas são utilizadas simultaneamente e para cada situação é avaliado qual das duas é mais eficiente e deve ser utilizada.
+???
+
+Agora é intuítivo entender o funcionamento do algoritmo Boyer-Moore.
 
 Esse funcionamento se resume basicamente em:
 
