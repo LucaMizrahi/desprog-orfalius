@@ -103,7 +103,7 @@ Por fim, se o caractere *y* que foi comparado com o último caractere de "word",
 
 Considerando essas três perguntas que foram feitas, o entendimento da heurística do *bad-character rule* fica mais claro.
 
-Segue a definição formal dessa heurística:
+<ins>Segue a definição formal dessa heurística:</ins>
 
 Vemos na simulação que a questão que foi levantada de ser impossível que a palavra "word" esteja dentro da palavra "they", devido ao fato do *padrão* não possuir um caractere "**y**" é justamente o princípio da heurística do *bad-character rule*. 
 
@@ -196,7 +196,7 @@ Nesse caso, como o segmento **"AB"** não aparece novamente no padrão, o mais e
 
 Com base nessas três perguntas, o entendimento da heurística do *good-sufix rule* fica mais claro.
 
-Segue a definição formal dessa heurística:
+<ins>Segue a definição formal dessa heurística:</ins>
 
 A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direita para esquerda), e verificar se existem caracteres em comum. Se houver, esse trecho similar é chamado de sufixo **t**. Caso haja uma reocorrência de **t** em $P$, $P$ é shiftado até essa recorrência do sufixo em $P$ dar "match" com o sufixo **t** que foi estabelecido.
 
