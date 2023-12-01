@@ -69,7 +69,7 @@ $T$: "They"
 
 $P$: "word" 
 
-Considerando o que já foi falado em relação ao algoritmo ingênuo, faz sentido comparar o todos os caracteres de "word" com todos os caracteres de "they"?
+Considerando o que já foi falado em relação ao algoritmo ingênuo, faz sentido comparar todos os caracteres de "word" com todos os caracteres de "they"?
 
 ::: Gabarito
 **Não**, pois é impossível que a palavra "word" esteja dentro da palavra "they", já que essa palavra não possui caracteres em comum com a palavra "word".
@@ -148,7 +148,7 @@ Serão realizadas **5** iterações para encontrar o padrão no texto.
 Observe que, utilizando a heurística do *bad-character rule*, é possível pular diversos alinhamentos, facilitando encontrar o padrão no texto, de forma mais eficiente.
 
 !!! Aviso
-Por curiosidade, o código em Python/C da heurística do *bad-character rule* está no **final** do handout. 
+Por curiosidade, o código em Python da heurística do *bad-character rule* está no **final** do handout. 
 !!!
 
 Mas isso não é tudo, ainda existe uma outra heurística para evitar comparações desnecessárias e tornar o algoritmo ainda mais eficiente, a *good-suffix rule*.
@@ -162,7 +162,7 @@ Na mesma lógica de entender como podemos pular caracteres, a heurística do goo
 ??? Checkpoint
 Tendo em vista a simulação anterior, encontre os caracteres em comum para a seguinte comparação: 
 
-$T$: "ACABBAAB"
+$T$: "ACAABAB"
 
 $P$: "AABAB"
 
@@ -173,7 +173,7 @@ Utilizando a mesma lógica da simulação anterior, percebemos que o segmento **
 ??? Checkpoint
 Seguindo o exemplo anterior:
 
-$T$: "ACABBAAB"
+$T$: "ACAABAB"
 
 $P$: "AABAB"
 
@@ -185,7 +185,7 @@ Sabendo que o segmento **"AB"** é o mesmo para o texto e para o padrão compara
 ??? Checkpoint
 Pensando agora em um segundo exemplo:
 
-$T$: "ACABBAAB"
+$T$: "ACAABAB"
 
 $P$: "ACBAB"
 
@@ -202,7 +202,7 @@ A heurística do *good-sufix rule* consiste em comparar $P$ e $T$ {red}(da direi
 
 No caso em que não existe nenhuma reocorrência do sufixo de $P$ em $T$, similiar ao *bad-character rule*, toda a palavra $P$ será shiftada para depois de onde foi encontrado o sufixo **t** de $T$ ou do primeiro caractere comparado.
 
-Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhante dê "match" em $P$ e $T$ (*mais claro no exemplo - passo 8*). 
+Existem alguns casos onde essa regra pode ficar um pouco mais confusa, como por exemplo, o caso onde é estabelecido o sufixo **t** em $T$, e apenas uma parte desse sufixo aparece em $P$. Nesse caso, $P$ será shiftado até que essa parte semelhante dê "match" em $P$ e $T$ (*mais claro na simulação do good-sufix - passo 8*). 
 
 Outro caso diferente é caso não seja definido nenhum sufixo **t** em $T$, a heurística do *good-sufix rule* não é aplicada (pula apenas 1 caractere, similar ao algoritmo ingênuo de busca em texto).
 
@@ -244,6 +244,10 @@ No entanto é importante perceber as diferenças entre as duas heurísticas, e p
 
 Considerando que a maior eficiência está diretamente relacionada a *quantidade de comparações desnecessárias que são evitadas*, avalie a seguinte situação e determine qual das duas heurísticas é mais eficiente para a primeira comparação da busca em texto a seguir:
 
+!!! Aviso
+Não é necessário realizar a simulação completa, apenas a primeira comparação.
+!!!
+
 $T$: GTTATAGCTGATCGCGGCGTAGCGGCGAA
 
 $P$: GTAGCGGCG
@@ -277,6 +281,10 @@ Logo, para essa comparação a heurística do *bad-character rule* é mais efici
 ??? Exercício
 
 Na mesma lógica do exercício anterior, avalie a seguinte situação e determine qual das duas heurísticas é mais eficiente para a primeira comparação da busca em texto a seguir:
+
+!!! Aviso
+Não é necessário realizar a simulação completa, apenas a primeira comparação.
+!!!
 
 $T$: CTGATCGCGGCGTAGCGGCGAA
 
@@ -409,7 +417,7 @@ Agora observe a seguinte simulação de busca em texto, utilizando o algoritmo B
 
 :Simulacao_PiorCaso
 
-??? Exercício
+??? Exercício - Pior Caso
 Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto, porém o algoritmo não consegue otimizar a busca por meio de suas heurísticas.
 
 **DICA** : Relembre o algoritmo ingênuo de busca em texto apresentado no começo do handout.
@@ -422,8 +430,8 @@ Para finalizar, observe essa última simulação de busca em texto, utilizando o
 
 :Simulacao_MelhorCaso
 
-??? Exercício
-Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas.
+??? Exercício - Melhor Caso
+Com base na simulação anterior, determine a complexidade do algoritmo Boyer-Moore quando o padrão é encontrado no texto e o algoritmo consegue otimizar a busca por meio de suas heurísticas (Em todas as iterações do algoritmo, é possível pular todos os alinhamentos possíveis).
 
 **DICA** : Relembre as iterações do algortimo Boyer-Moore por meio de suas heurísticas.
 ::: Gabarito
